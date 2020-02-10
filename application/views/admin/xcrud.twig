@@ -1,0 +1,127 @@
+{% extends "layouts/admin.twig" %}
+
+{% block styles %}
+    <link href="{{ asset('css/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .xcrud-actions .btn-group {
+            float: right !important;
+        }
+        .xcrud-view {
+            margin-top: 25px !important;
+        }
+        .form-horizontal .control-label {
+            text-align: left;
+        }
+        .col-sm-3 {
+            width: 10% !important;
+        }
+        .pagination {
+            vertical-align: top;
+            margin: 2px 0;
+        }
+    </style>
+    
+{% endblock %}
+
+
+{% block content %}
+
+{#<button id="deleteAll">All Delete </button>#}
+
+    {% if create is not empty %}
+        {{  xcrud.render("edit") | raw }}
+
+    {% else %}
+        {{  xcrud.render() | raw }}
+
+    {% endif  %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {{ xcrud.load_js() | raw}}
+
+    <script type="text/javascript" src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(document).on("xcrudbeforerequest", function(event, container) {
+            if (container) {
+                const elem = jQuery(container).find("select");
+                if (elem.length) {
+                    elem.select2("destroy");
+                }
+            } else {
+                const elem = jQuery(".xcrud").find("select");
+                if (elem.length) {
+                    elem.select2("destroy");
+                }
+            }
+        });
+        jQuery(document).on("ready xcrudafterrequest", function(event, container) {
+            if (container) {
+                const elem = jQuery(container).find("select");
+                if (elem.length) {
+                    elem.select2();
+                }
+            } else {
+                const elem = jQuery(".xcrud").find("select");
+                if (elem.length) {
+                    elem.select2();
+                }
+            }
+        });
+        jQuery(document).on("xcrudbeforedepend", function(event, container, data) {
+            const elem = jQuery(container).find('select[name="' + data.name + '"]');
+            if (elem.length) {
+                elem.select2("destroy");
+            }
+        });
+        jQuery(document).on("xcrudafterdepend", function(event, container, data) {
+            elem = jQuery(container).find('select[name="' + data.name + '"]');
+            if (elem.length) {
+                elem.select2();
+            }
+        });
+
+
+           $("#select_all").click( function() {
+        if ($(this).prop("checked")) {
+            $("[class=checkboxcls]").prop("checked", true);
+        } else {
+            $("[class=checkboxcls]").prop("checked", false);
+        }
+    });
+    $("#deleteAll").click(function () {
+        var checkboxes = $("[class=checkboxcls]:checked");
+        var all_data = [];
+        $.each(checkboxes, function (index, object, container) {
+            all_data.push(  $(object).val())
+        });
+        if(all_data != ''){
+        var answer = confirm("Are you sure you want to delete?");
+        if (answer){
+            
+            $.post("{{ del_url }}", { primery_keys: all_data}, function(theResponse){
+                //alert(theResponse);
+                    location.reload();
+            });
+        
+        }else{
+            location.reload();
+            return false;
+        }
+        }else{
+            alert("please select this item");
+        }
+    });
+
+
+   
+
+    </script>
+
+
+    
+{% endblock %}
+

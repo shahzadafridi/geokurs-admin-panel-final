@@ -1,0 +1,47 @@
+{% extends "layouts/admin.twig" %}
+
+
+
+{% block content %}
+
+    <div class="panel panel-default">
+        {% if data.success is not empty %}
+            <div class="alert alert-success">
+                <strong>Success!</strong> Update Successfully.
+            </div>
+        {% endif %}
+        <form action="{{ base_url()~uri_string }}" method="POST" class="form-horizontal"
+              enctype="multipart/form-data">
+            <div class="row form-group" style="margin-top: 20px">
+                <label class="col-md-2 control-label text-left" style="margin-top: 4px">Active</label>
+                <div class="col-md-4">
+                    <input name="status_data"  type="checkbox" {{ data.status ? "checked" : "" }} class="form-control" />
+                </div>
+            </div>
+            <hr>
+            {% for index,value in data.credentials %}
+            <div class="row form-group">
+                <label class="col-md-2 control-label text-left" style="text-transform:capitalize">{{ index | replace({'_': " " }) }}</label>
+                <div class="col-md-4">
+                    <input name="credentials[]" value="{{ value }}" type="text" class="form-control" placeholder="{{ index | replace({'_': " " }) }}"/>
+                    <input name="credentials_keys[]" value="{{ index }}" type="hidden" class="form-control" placeholder="{{ index | replace({'_': " " }) }}"/>
+                </div>
+            </div>
+                <hr>
+            {% endfor %}
+
+            <button type="submit" class="btn btn-primary btn-block btn-md">Save</button>
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    $(document).ready(function(){
+
+
+    });
+
+</script>
+{% endblock %}

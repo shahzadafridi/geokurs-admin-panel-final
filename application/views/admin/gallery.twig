@@ -1,0 +1,177 @@
+{% extends "layouts/admin.twig" %}
+
+{% block styles %}
+    <link href="{{ asset('plugins/dropzone/dropzone.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('plugins/colorbox/colorbox.css') }}" type="text/css" rel="stylesheet" />
+{% endblock %}
+
+{% block content %}
+
+    <div class="panel panel-default">
+        <div class="panel-heading">Gallery Management</div>
+
+        <div class="panel-body">
+            <div class="collapse" id="UploadPhotos">
+                <div class="well well-sm">
+                    <div class="modal-body">
+                        <div action='{{ base_url("admin/product/gallery_upload/#{product_id}") }}' id="dropzone" class="dropzone"> </div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="table table-striped table-hover">
+                <thead>
+                <tr>
+                    <th class="col-md-2">
+                        <a class="btn btn-success" data-toggle="collapse" href="#UploadPhotos" aria-expanded="false" aria-controls="UploadPhotos">
+                            <i class="fa fa-photo"></i> Add Photos
+                        </a>
+                    </th>
+                    <th class="col-md-2" style="padding-left:35px" >
+                        <input class="pointer all" data-imgname="abcd" type="checkbox" data-toggle="tooltip" data-placement="top"  title="Select All" id="select_all" />
+                        <span data-toggle="tooltip" data-placement="top" title="Delete Selected Images from Table only" class="btn btn-danger btn-xs col-md-9 pull-right delMultiple">
+                            <i class="fa fa-trash-o"></i> Delete
+                        </span>
+                    </th>
+                    {#<th class="col-md-2 text-center">Order</th>#}
+                    <th class="col-md-2 text-center">Active</th>
+                    {#<th class="col-md-2 text-center">Thumbnail</th>#}
+                    <th class="col-md-2 text-center">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for imageObj in gallery %}
+                <tr  id="tr_{{ imageObj.id }}">
+                    <td>
+                        <a href='{{ asset("uploads/product/gallery/#{imageObj.image}") }}'>
+                            <img src='{{ asset("uploads/product/gallery/#{imageObj.image}") }}' href='{{ asset("uploads/product/gallery/#{imageObj.image}") }}' class="img-responsive colorbox">
+                        </a>
+                    </td>
+                    <td style="padding:35px">
+                        <input type="checkbox" id="deleteBox" data-imgname="{{ imageObj.image }}" name="image_ids[]" value="{{ imageObj.id }}" class="checkboxcls"/>
+                    </td>
+                    {#<td style="padding:35px">#}
+                        {#<input type="number" name="sort_order" data-id="{{ imageObj.id }}" onchange="updateSortOrder(this)" value="{{ imageObj.sortOrder }}" class="form-control"/>#}
+                    {#</td>#}
+                    <td style="padding:35px">
+                        <input type="checkbox" name="flag_active" data-id="{{ imageObj.id }}" onclick="updateFlagActive(this)" value="{{ imageObj.flagActive }}" {{ (imageObj.flagActive) ? 'checked' : '' }} class="checkboxcls"/>
+                    </td>
+                    {#<td style="padding:35px">#}
+                        {#<input type="radio" name="flag_thumbnail" data-id="{{ imageObj.id }}" onclick="updateFlagThumbnail(this)" value="{{ imageObj.flagThumbnail }}" {{ (imageObj.flagThumbnail) ? 'checked' : '' }} class="checkboxcls"/>#}
+                    {#</td>#}
+                    <td style="padding:35px">
+                        <button class="btn btn-danger btn-block btn-md deleteImg" data-id="{{ imageObj.id }}" name="{{ imageObj.image }}">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('plugins/dropzone/dropzone.min.js') }}"></script>
+    <script src="{{ asset('plugins/colorbox/jquery.colorbox.js') }}"></script>
+    <script>
+    $(document).ready(function(){
+        $(".colorbox").colorbox({rel:'colorbox'});
+        $(".iframe").colorbox({iframe:true, width:"80%", height:"80%"});
+    });
+
+    $(function() {
+        //Drop zone functions
+        Dropzone.options.dropzone = {
+            init: function () {
+                this.on("addedfile", function(file) {
+                    console.log("Upload Processing...");
+                    console.log(file);
+                });
+
+                this.on('complete', function (file) {
+                    if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                        location.reload();
+                    }
+                });
+            }
+        };
+
+        $('#select_all').click(function () {
+            $('[id^=deleteBox]').prop('checked', this.checked);
+        });
+
+        $(".deleteImg").click(function() {
+            if (confirm('Are you sure you want to delete?')) {
+                var image_ids = [];
+                image_ids.push(parseInt($(this).data('id')));
+                $.post('{{ base_url("admin/product/gallery_delete") }}', {
+                    image_ids: image_ids,
+                    module_type : "product",
+                    module_id: {{ product_id }}
+                }, function(resp){
+                    console.log(resp);
+                    location.reload();
+                });
+            }
+        });
+
+        $('.delMultiple').click(function() {
+            if (confirm('Are you sure you want to delete?')) {
+                var image_ids = [];
+                $("[name^=image_ids]:checked").each(function () {
+                    image_ids.push(parseInt($(this).val()));
+                });
+                $.post('{{ base_url("admin/product/gallery_delete") }}', {
+                    image_ids: image_ids,
+                    module_type : "product",
+                    module_id: {{ product_id }}
+                }, function(resp){
+                    console.log(resp);
+                    location.reload();
+                });
+            }
+        });
+    });
+
+    function updateSortOrder(elem) {
+        var orderValue = parseInt($(elem).val());
+        var id = parseInt($(elem).data('id'));
+        $.post('{{ base_url("admin/product/gallery_sort_order") }}', {
+            image_id: id,
+            sort_order: orderValue,
+            module_type : "product",
+            module_id: {{ product_id }}
+        }, function(resp) {
+            console.log(resp);
+            location.reload();
+        });
+    }
+
+    function updateFlagActive(elem) {
+        var flagStatus = ($(elem).is(':checked')) ? 1 : 0;
+        var id = parseInt($(elem).data('id'));
+        $.post('{{ base_url("admin/product/gallery_flag_active") }}', {
+            image_id: id,
+            flag_status: flagStatus,
+            module_type : "product",
+            module_id: {{ product_id }}
+        }, function(resp) {
+            console.log(resp);
+            location.reload();
+        });
+    }
+
+    function updateFlagThumbnail(elem) {
+        var image_id = parseInt($(elem).data('id'));
+        $.post('{{ base_url("admin/product/gallery_flag_thumbnail") }}', {
+            image_id: image_id,
+            module_type : "product",
+            module_id: {{ product_id }}
+        },function(resp) {
+            console.log(resp);
+            location.reload();
+        });
+    }
+</script>
+{% endblock %}

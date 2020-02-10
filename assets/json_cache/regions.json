@@ -1,0 +1,74 @@
+{
+  "Arusha": [
+    {
+      "Arusha": "Arusha",
+      "Arumeru": "Arumeru",
+      "Longido": "Longido",
+      "Karatu": "Karatu",
+      "Monduli": "Monduli",
+      "Ngorongoro": "Ngorongoro"
+    }
+  ],
+  "Kilimanjaro": [
+    {
+      "Hai": "Hai",
+      "Moshi": "Moshi",
+      "Mwanga": "Mwanga",
+      "Rombo": "Rombo",
+      "Same": "Same",
+      "Siha": "Siha"
+    }
+  ],
+  "Dar es Salaam": [
+    {
+      "Ilala": "Ilala",
+      "Kinondoni": "Kinondoni",
+      "Kigamboni": "Kigamboni",
+      "Temeke": "Temeke",
+      "Ubungo": "Ubungo"
+    }
+  ],
+  "Dodoma": [
+    {
+      "Bahi": "Bahi",
+      "Chamwino": "Chamwino",
+      "Chemba": "Chemba",
+      "Kondoa": "Kondoa",
+      "Kongwa": "Kongwa",
+      "Mpwapwa": "Mpwapwa",
+      "Dodoma": "Dodoma"
+    }
+  ],
+  "Geita": [
+    {
+      "Bukombe": "Bukombe",
+      "Chato": "Chato",
+      "Mbongwe": "Mbongwe",
+      "Nyanghwale": "Nyanghwale"
+    }
+  ],
+  "Iringa": [],
+  "Kagera": [],
+  "Katavi": [],
+  "Kigoma": [],
+  "Kusini Pemba": [],
+  "Kusini Unguja": [],
+  "Lindi": [],
+  "Manyara": [],
+  "Mara": [],
+  "Mbeya": [],
+  "Mjini Magharibi": [],
+  "Morogoro": [],
+  "Mtwara": [],
+  "Mwanza": [],
+  "Njombe": [],
+  "Pwani": [],
+  "Rukwa": [],
+  "Ruvuma": [],
+  "Shinyanga": [],
+  "Simiyu": [],
+  "Singida": [],
+  "Songwe": [],
+  "Tabora": [],
+  "Tanga": []
+}

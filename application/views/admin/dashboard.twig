@@ -1,0 +1,122 @@
+{% extends "layouts/admin.twig" %}
+{% block content %}
+<div class="row">
+    <div class="col-lg-3">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Инструкции</h5>
+            </div>
+            <div class="ibox-content">
+                <h1 class="no-margins">{{ data.instructions }}</h1>
+{#                <div class="stat-percent font-bold text-success">{{ data.instructions }}% <i class="fa fa-bolt"></i></div>#}
+                <small>Всего Инструкции</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Всего Базовые станции</h5>
+            </div>
+            <div class="ibox-content">
+                <h1 class="no-margins">{{ data.basestations }}</h1>
+{#                <div class="stat-percent font-bold text-info">{{ data.basestations }}% <i class="fa fa-level-up"></i></div>#}
+                <small>Базовые станции</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Категории</h5>
+            </div>
+            <div class="ibox-content">
+                <h1 class="no-margins">{{ data.categories }}</h1>
+{#                <div class="stat-percent font-bold text-navy">{{ data.categories }}% <i class="fa fa-level-up"></i></div>#}
+                <small>Всего Категории</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+<div class="col-md-12">
+{% block styles %}
+    <link href="{{ asset('css/plugins/select2/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        .xcrud-actions .btn-group {
+            float: right !important;
+        }
+        .xcrud-view {
+            margin-top: 25px !important;
+        }
+        .form-horizontal .control-label {
+            text-align: left;
+        }
+        .col-sm-3 {
+            width: 10% !important;
+        }
+        .pagination {
+            vertical-align: top;
+            margin: 2px 0;
+        }
+    </style>
+{% endblock %}
+     {% if create is not empty %}
+        {{  xcrud.render("edit") | raw }}
+
+    {% else %}
+        {{  xcrud.render() | raw }}
+
+    {% endif  %}
+</div>
+</div>
+{% endblock %}
+{% block scripts %}
+   
+   
+
+    {{ xcrud.load_js() | raw}}
+
+    <script type="text/javascript" src="{{ asset('js/plugins/select2/select2.full.min.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(document).on("xcrudbeforerequest", function(event, container) {
+            if (container) {
+                const elem = jQuery(container).find("select");
+                if (elem.length) {
+                    elem.select2("destroy");
+                }
+            } else {
+                const elem = jQuery(".xcrud").find("select");
+                if (elem.length) {
+                    elem.select2("destroy");
+                }
+            }
+        });
+        jQuery(document).on("ready xcrudafterrequest", function(event, container) {
+            if (container) {
+                const elem = jQuery(container).find("select");
+                if (elem.length) {
+                    elem.select2();
+                }
+            } else {
+                const elem = jQuery(".xcrud").find("select");
+                if (elem.length) {
+                    elem.select2();
+                }
+            }
+        });
+        jQuery(document).on("xcrudbeforedepend", function(event, container, data) {
+            const elem = jQuery(container).find('select[name="' + data.name + '"]');
+            if (elem.length) {
+                elem.select2("destroy");
+            }
+        });
+        jQuery(document).on("xcrudafterdepend", function(event, container, data) {
+            elem = jQuery(container).find('select[name="' + data.name + '"]');
+            if (elem.length) {
+                elem.select2();
+            }
+        });
+    </script>
+{% endblock %}

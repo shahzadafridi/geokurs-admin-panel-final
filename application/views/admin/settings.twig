@@ -1,0 +1,117 @@
+{% extends "layouts/admin.twig" %}
+{% block content %}
+    <div class="panel-body">
+
+        {% if data.success is not empty %}
+            <div class="alert alert-success">
+                <strong>Success!</strong> Update Successfully.
+            </div>
+        {% endif %}
+        {% if data.errors is not empty %}
+            <div class="alert alert-danger">
+                <strong>Errors!</strong> {{ data.errors }}
+            </div>
+        {% endif %}
+                <form action="{{ base_url("admin/settings") }}" method="POST" class="form-horizontal"
+                      enctype="multipart/form-data">
+                    <div class="row form-group">
+                        <label class="col-md-2 control-label text-left">Site Name</label>
+                        <div class="col-md-4">
+                            <input name="sitename" value="{{ data.result.sitename }}" type="text" class="form-control" placeholder="Site name"/>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-md-2 control-label text-left">Business Logo</label>
+                        <div class="col-md-4">
+                            <input type="file" class="btn btn-default upload-image" id="hlogo" name="logo">
+                            <span class="help-block">Only PNG file supported</span>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="{{ base_url("assets/front/image/"~data.result.logo )}}" style="position: absolute; left: 188px;  max-height: 80px;"  class="hlogo_preview_img img-fluid brand-logos logo">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <label class="col-md-2 control-label text-left">Favicon</label>
+                        <div class="col-md-4">
+                            <input type="file" class="btn btn-default upload-image" id="hfavicon" name="favicon">
+                            <span class="help-block">Only PNG file supported</span>
+                        </div>
+                        <div class="col-md-4">
+                            <img style="position: absolute; left: 188px;  max-height: 80px;"  class="hlogo_preview_img img-fluid brand-logos favicon" src="{{ base_url("assets/front/image/"~data.result.favicon )}}">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <label class="col-md-2 control-label text-left">Site Color</label>
+                        <div class="col-md-4">
+                            <input name="maincolor" value="{{ data.result.maincolor }}" type="color" class="form-control" placeholder="Site Color"/>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <label class="col-md-2 control-label text-left">Facebook Url</label>
+                        <div class="col-md-4">
+                            <input name="fb_url" value="{{ data.result.fb_url }}" type="text" class="form-control" placeholder="Facebook Url"/>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <label class="col-md-2 control-label text-left">Linked-In Url</label>
+                        <div class="col-md-4">
+                            <input name="linked_url" value="{{ data.result.linked_url }}" type="text" class="form-control" placeholder="Linked-In Url"/>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row form-group">
+                        <label class="col-md-2 control-label text-left">Twitter Url</label>
+                        <div class="col-md-4">
+                            <input name="twitter_url" value="{{ data.result.twitter_url }}" type="text" class="form-control" placeholder="Twitter Url"/>
+                        </div>
+                    </div>
+
+                    <hr>
+
+
+
+                    <button type="submit" class="btn btn-primary btn-block btn-md">Save</button>
+                </form>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="{{ asset('plugins/dropzone/dropzone.min.js') }}"></script>
+    <script src="{{ asset('plugins/colorbox/jquery.colorbox.js') }}"></script>
+    <script>
+        function readLogo(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('.logo').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#hlogo").change(function () {
+            readLogo(this);
+        });
+
+        function readFavicon(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('.favicon').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        $("#hfavicon").change(function () {
+            readFavicon(this);
+        });
+
+    </script>
+{% endblock %}

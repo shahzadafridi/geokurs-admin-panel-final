@@ -1,0 +1,48 @@
+/* widget numberpicker */
+
+.widgets-numberpicker {
+  border: 8px solid transparent;
+  display: inline-block;
+  position: relative;
+  -ms-transition: opacity 200ms ease 0ms;
+}
+
+.widgets-numberpicker-disabled {
+  opacity: 0.26;
+}
+
+.widgets-numberpicker-decrement,
+.widgets-numberpicker-increment {
+  display: inline-block;
+  height: 32px;
+  line-height: 32px;
+  text-align: center;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+.widgets-numberpicker-decrement,
+.widgets-numberpicker-increment {
+  border-radius: 4px;
+}
+
+.widgets-numberpicker-decrement,
+.widgets-numberpicker-increment {
+  box-sizing: border-box;
+  font-size: 26px;
+  width: 32px;
+}
+
+.widgets-numberpicker-decrement {
+  background: #e8f0fe url("//www.gstatic.com/images/icons/material/system/2x/remove_gm_blue600_24dp.png") no-repeat center/24px;
+}
+
+.widgets-numberpicker-increment {
+  background: #e8f0fe url("//www.gstatic.com/images/icons/material/system/2x/add_gm_blue600_24dp.png") no-repeat center/24px;
+}
+
+.widgets-numberpicker-disabled .widgets-numberpicker-decrement {
+  background-color: #dadce0;
+  background-image: url("//www.gstatic.com/images/icons/material/system/2x/remove_black_24dp.png");
+}
+
